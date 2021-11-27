@@ -2,6 +2,7 @@
 import argparse
 import errno
 import fnmatch
+import re
 import os
 
 from os import path
@@ -19,6 +20,10 @@ def argument_handler():
     parser.add_argument('-q', '--question_number', nargs='+', help='<Required> Set flag', required=True)
     # Use like:
     # python arg.py -l 1234 2345 3456 4567
+
+    parser.add_argument('-a', '--append_file_path', metavar='TARGET_DIR',
+                        help='Path to a directory containing ipynb file')
+
 
     args = parser.parse_args()
 
@@ -86,13 +91,17 @@ def all_answers_of_one_student(code_from_student):
 
 def optional_questions_extractor(required_questions_number_list, answer_list):
     selected_questions = list()
-    # selected_questions.append(answer_list[0])
-    # selected_questions.append(answer_list[3])
 
     for q_number in required_questions_number_list:
         if len(answer_list) >= 1:
             # the index of the list should be the question number - 1
-            selected_questions.append(answer_list[int(q_number)-1])
+            one_question = answer_list[int(q_number) - 1]
+
+            if len(one_question) == 0:
+                continue
+            # one_question.insert(0, ' " start question {number}\n" '.format(number=q_number))
+            # one_question.append(' "# end question {number}\n" '.format(number=q_number))
+            selected_questions.append(one_question)
 
     for i in range(len(selected_questions)):
         for j in range(len(selected_questions[i])):
@@ -108,11 +117,11 @@ def optional_questions_extractor(required_questions_number_list, answer_list):
                 if selected_questions[i][j][k] == "#":
                     selected_questions[i][j] = selected_questions[i][j][0:k]  # remove comment
                     break
+
     return selected_questions
 
 
-def produce_final_extraction(file_name, question_contexts):
-
+def produce_final_extraction(file_name, question_contexts, append_file_path):
     # https://stackoverflow.com/a/12517490/14207562
     if not os.path.exists(os.path.dirname(file_name)):
         try:
@@ -121,11 +130,17 @@ def produce_final_extraction(file_name, question_contexts):
             if exc.errno != errno.EEXIST:
                 raise
 
+    if append_file_path:
+        with open(append_file_path, mode='r') as in_file, \
+                open(file_name, mode='w') as out_file:
+            for line in in_file:
+                out_file.write(line)
 
-    txt_file = open(file_name, "w")
+    txt_file = open(file_name, "a")
     for i in range(len(question_contexts)):
         for j in range(len(question_contexts[i])):
             if len(question_contexts[i][j]) > 0:  # delete some space lines
+                txt_file.write("    ")
                 txt_file.write(question_contexts[i][j])
                 txt_file.write("\n")
     txt_file.close()
@@ -152,7 +167,7 @@ def main():
         # https://stackoverflow.com/a/4444952/14207562
         result_save_path = path.join(args.base_dir, 'solution', path.splitext(path.basename(target_file))[0] + '.py')
 
-        produce_final_extraction(result_save_path, selected_questions)
+        produce_final_extraction(result_save_path, selected_questions, args.append_file_path)
 
 
 if __name__ == "__main__":
