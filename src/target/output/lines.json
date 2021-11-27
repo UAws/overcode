@@ -1,0 +1,117 @@
+[
+    {
+        "expanded_representation": "def student_defined_function(___,___): ||| [{'print student_defined_function(1,3)': ['myNaN'], 'print student_defined_function(2,6)': ['myNaN']}, {'print student_defined_function(1,3)': ['myNaN'], 'print student_defined_function(2,6)': ['myNaN']}]", 
+        "id": 1, 
+        "line_values": [
+            {
+                "print student_defined_function(1,3)": [
+                    "myNaN"
+                ], 
+                "print student_defined_function(2,6)": [
+                    "myNaN"
+                ]
+            }, 
+            {
+                "print student_defined_function(1,3)": [
+                    "myNaN"
+                ], 
+                "print student_defined_function(2,6)": [
+                    "myNaN"
+                ]
+            }
+        ], 
+        "template": "def student_defined_function(___,___):"
+    }, 
+    {
+        "expanded_representation": "___=___ ||| [{'print student_defined_function(1,3)': ['myNaN'], 'print student_defined_function(2,6)': ['myNaN']}, {'print student_defined_function(1,3)': ['myNaN'], 'print student_defined_function(2,6)': ['myNaN']}]", 
+        "id": 2, 
+        "line_values": [
+            {
+                "print student_defined_function(1,3)": [
+                    "myNaN"
+                ], 
+                "print student_defined_function(2,6)": [
+                    "myNaN"
+                ]
+            }, 
+            {
+                "print student_defined_function(1,3)": [
+                    "myNaN"
+                ], 
+                "print student_defined_function(2,6)": [
+                    "myNaN"
+                ]
+            }
+        ], 
+        "template": "___=___"
+    }, 
+    {
+        "expanded_representation": "return ___-___ ||| [{'print student_defined_function(1,3)': ['myNaN'], 'print student_defined_function(2,6)': ['myNaN']}, {'print student_defined_function(1,3)': ['myNaN'], 'print student_defined_function(2,6)': ['myNaN']}]", 
+        "id": 3, 
+        "line_values": [
+            {
+                "print student_defined_function(1,3)": [
+                    "myNaN"
+                ], 
+                "print student_defined_function(2,6)": [
+                    "myNaN"
+                ]
+            }, 
+            {
+                "print student_defined_function(1,3)": [
+                    "myNaN"
+                ], 
+                "print student_defined_function(2,6)": [
+                    "myNaN"
+                ]
+            }
+        ], 
+        "template": "return ___-___"
+    }, 
+    {
+        "expanded_representation": "return ___*___ ||| [{'print student_defined_function(1,3)': ['myNaN'], 'print student_defined_function(2,6)': ['myNaN']}, {'print student_defined_function(1,3)': ['myNaN'], 'print student_defined_function(2,6)': ['myNaN']}]", 
+        "id": 4, 
+        "line_values": [
+            {
+                "print student_defined_function(1,3)": [
+                    "myNaN"
+                ], 
+                "print student_defined_function(2,6)": [
+                    "myNaN"
+                ]
+            }, 
+            {
+                "print student_defined_function(1,3)": [
+                    "myNaN"
+                ], 
+                "print student_defined_function(2,6)": [
+                    "myNaN"
+                ]
+            }
+        ], 
+        "template": "return ___*___"
+    }, 
+    {
+        "expanded_representation": "return ___+___ ||| [{'print student_defined_function(1,3)': ['myNaN'], 'print student_defined_function(2,6)': ['myNaN']}, {'print student_defined_function(1,3)': ['myNaN'], 'print student_defined_function(2,6)': ['myNaN']}]", 
+        "id": 5, 
+        "line_values": [
+            {
+                "print student_defined_function(1,3)": [
+                    "myNaN"
+                ], 
+                "print student_defined_function(2,6)": [
+                    "myNaN"
+                ]
+            }, 
+            {
+                "print student_defined_function(1,3)": [
+                    "myNaN"
+                ], 
+                "print student_defined_function(2,6)": [
+                    "myNaN"
+                ]
+            }
+        ], 
+        "template": "return ___+___"
+    }
+]

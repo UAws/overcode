@@ -1,0 +1,44 @@
+[
+    {
+        "code": "def student_defined_function(a,bcdB):", 
+        "corresponding_lines": [
+            1
+        ], 
+        "id": 1
+    }, 
+    {
+        "code": "aB=a", 
+        "corresponding_lines": [
+            2
+        ], 
+        "id": 2
+    }, 
+    {
+        "code": "bcd=bcdB", 
+        "corresponding_lines": [
+            2
+        ], 
+        "id": 3
+    }, 
+    {
+        "code": "return aB+bcd", 
+        "corresponding_lines": [
+            5
+        ], 
+        "id": 4
+    }, 
+    {
+        "code": "return aB-bcd", 
+        "corresponding_lines": [
+            3
+        ], 
+        "id": 5
+    }, 
+    {
+        "code": "return aB*bcd", 
+        "corresponding_lines": [
+            4
+        ], 
+        "id": 6
+    }
+]

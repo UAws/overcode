@@ -1,0 +1,50 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+entity run_pipeline.py as run_pipeline
+entity args.run_pre as run_pre
+entity pipeline_preprocessing.py as pipeline_preprocessing
+entity preprocess_pipeline_data as preprocess_pipeline_data
+entity tidy as tidy
+entity tidy_one as tidy_one
+entity augment as augment
+entity execute_and_pickle as exec_pickle
+entity do_logger_run as do_logger_run
+entity logger_wrapper as logger_wrapper
+entity exec_script_str_local as exec_script_str_local
+entity logger._runscript as runscript
+entity do_pickle as do_pickle
+
+autonumber
+
+run_pipeline -> run_pre : based on argument
+run_pre -> pipeline_preprocessing : call preprocessor
+pipeline_preprocessing -> preprocess_pipeline_data : prepare pipeline data
+preprocess_pipeline_data -> preprocess_pipeline_data : formatting test cases \n from testCases.py
+preprocess_pipeline_data -> tidy : starting tidy input
+tidy ->  tidy_one : looping all files \n and call tidy_one
+tidy_one -> tidy : tidy_up & minify
+tidy -> preprocess_pipeline_data : finish tidy \n all input files
+preprocess_pipeline_data -> augment : append the required modification to students' submissio
+augment -> preprocess_pipeline_data : go back to pipeline
+preprocess_pipeline_data -> exec_pickle : execute the submission and generate pickle
+exec_pickle -> do_logger_run : promote test case and run logger
+do_logger_run -> logger_wrapper : create pg_logger instance
+logger_wrapper -> exec_script_str_local : execute the submitted python script
+exec_script_str_local -> runscript : execute and logging
+runscript -> exec_pickle : finish execution
+exec_pickle -> do_pickle : Pickle the traces, outputs, and testcases
+do_pickle -> preprocess_pipeline_data : go back to go back to pipeline
+preprocess_pipeline_data -> preprocess_pipeline_data : print out the stdout \nand supporting information
+preprocess_pipeline_data -> run_pipeline : finish the preprocessing
+
+
+
+
+'
+'Alice -> Bob: Authentication Request
+'Bob --> Alice: Authentication Response
+'
+'Alice -> Bob: Another authentication Request
+'Alice <-- Bob: another authentication Response
+@enduml

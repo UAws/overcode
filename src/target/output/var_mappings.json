@@ -1,0 +1,178 @@
+[
+    {
+        "maps_to": [
+            [
+                "___=a", 
+                "def student_defined_function(a,___):"
+            ]
+        ], 
+        "match_type": "values_match", 
+        "original": [
+            "___=a", 
+            "def student_defined_function(a,___):"
+        ], 
+        "solution": "student2", 
+        "values_of_match": {
+            "print student_defined_function(1,3)": [
+                1
+            ], 
+            "print student_defined_function(2,6)": [
+                2
+            ]
+        }
+    }, 
+    {
+        "maps_to": [
+            [
+                "bcd=___", 
+                "return ___+bcd"
+            ]
+        ], 
+        "match_type": "values_match", 
+        "original": [
+            "bcd=___", 
+            "return ___-bcd"
+        ], 
+        "solution": "student2", 
+        "values_of_match": {
+            "print student_defined_function(1,3)": [
+                3
+            ], 
+            "print student_defined_function(2,6)": [
+                6
+            ]
+        }
+    }, 
+    {
+        "maps_to": [
+            [
+                "bcd=___", 
+                "return ___+bcd"
+            ]
+        ], 
+        "match_type": "values_match", 
+        "original": [
+            "___=b", 
+            "def student_defined_function(___,b):"
+        ], 
+        "solution": "student2", 
+        "values_of_match": {
+            "print student_defined_function(1,3)": [
+                3
+            ], 
+            "print student_defined_function(2,6)": [
+                6
+            ]
+        }
+    }, 
+    {
+        "maps_to": [
+            [
+                "___=a", 
+                "def student_defined_function(a,___):"
+            ]
+        ], 
+        "match_type": "values_match", 
+        "original": [
+            "return abc-___", 
+            "abc=___"
+        ], 
+        "solution": "student2", 
+        "values_of_match": {
+            "print student_defined_function(1,3)": [
+                1
+            ], 
+            "print student_defined_function(2,6)": [
+                2
+            ]
+        }
+    }, 
+    {
+        "maps_to": [
+            [
+                "___=a", 
+                "def student_defined_function(a,___):"
+            ]
+        ], 
+        "match_type": "values_match", 
+        "original": [
+            "___=a", 
+            "def student_defined_function(a,___):"
+        ], 
+        "solution": "student1", 
+        "values_of_match": {
+            "print student_defined_function(1,3)": [
+                1
+            ], 
+            "print student_defined_function(2,6)": [
+                2
+            ]
+        }
+    }, 
+    {
+        "maps_to": [
+            [
+                "bcd=___", 
+                "return ___+bcd"
+            ]
+        ], 
+        "match_type": "values_match", 
+        "original": [
+            "bcd=___", 
+            "return ___*bcd"
+        ], 
+        "solution": "student1", 
+        "values_of_match": {
+            "print student_defined_function(1,3)": [
+                3
+            ], 
+            "print student_defined_function(2,6)": [
+                6
+            ]
+        }
+    }, 
+    {
+        "maps_to": [
+            [
+                "bcd=___", 
+                "return ___+bcd"
+            ]
+        ], 
+        "match_type": "values_match", 
+        "original": [
+            "___=b", 
+            "def student_defined_function(___,b):"
+        ], 
+        "solution": "student1", 
+        "values_of_match": {
+            "print student_defined_function(1,3)": [
+                3
+            ], 
+            "print student_defined_function(2,6)": [
+                6
+            ]
+        }
+    }, 
+    {
+        "maps_to": [
+            [
+                "___=a", 
+                "def student_defined_function(a,___):"
+            ]
+        ], 
+        "match_type": "values_match", 
+        "original": [
+            "abc=___", 
+            "return abc*___"
+        ], 
+        "solution": "student1", 
+        "values_of_match": {
+            "print student_defined_function(1,3)": [
+                1
+            ], 
+            "print student_defined_function(2,6)": [
+                2
+            ]
+        }
+    }
+]

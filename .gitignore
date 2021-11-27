@@ -3,3 +3,6 @@
 logging/grade.txt
 logging/*
 src/venv
+.idea/
+
+overcode-meteor/

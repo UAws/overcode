@@ -1,7 +1,7 @@
 {
     "base_dirs": {
     	"iterpower": "iterPower-edx",
-        "example1": "6.0001_dotprod",
+        "example1": "data",
         "compderiv": "computeDeriv",
         "flatten": "flatten",
         "permutation": "is_list_permutation",
@@ -17,6 +17,7 @@
         "hangman1":"hangman_Ans1",
         "hangman2":"hangman_Ans2",
         "repeated":"repeated",
-        "accumulate":"accumulate"
+        "accumulate":"accumulate",
+        "testtt":" "
     }
 }
