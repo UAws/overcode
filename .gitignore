@@ -6,3 +6,4 @@ src/venv
 .idea/
 
 overcode-meteor/
+/src/original_ipynb_files/

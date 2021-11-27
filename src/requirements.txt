@@ -8,7 +8,6 @@ certifi==2016.2.28
 cycler==0.10.0
 dask==0.9.0
 decorator==4.0.9
-
 gensim==0.12.4
 gnureadline==6.3.3
 httpretty==0.8.10
@@ -27,7 +26,6 @@ pexpect==4.0.1
 pickleshare==0.7.2
 Pillow==3.2.0
 ptyprocess==0.5.1
-
 pyparsing==2.1.4
 python-dateutil==2.5.3
 pytz==2016.4
