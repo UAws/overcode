@@ -39,7 +39,7 @@ def find_all_ipynb_path(path_from_args):
 
 
 def open_and_format_code_from_file(individual_path_of_submission):
-    file_obj = open(individual_path_of_submission, 'r')  # n101_PracExam1
+    file_obj = open(individual_path_of_submission, 'r', errors='replace')  # n101_PracExam1
     student = file_obj.readlines()
     # file_obj1 = open("solution.ipynb", 'r')
     # solution = file_obj1.readlines()
