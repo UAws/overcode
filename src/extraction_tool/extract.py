@@ -24,7 +24,6 @@ def argument_handler():
     parser.add_argument('-a', '--append_file_path', metavar='TARGET_DIR',
                         help='Path to a directory containing ipynb file')
 
-
     args = parser.parse_args()
 
     return args
@@ -91,7 +90,7 @@ def all_answers_of_one_student(code_from_student):
 
 def optional_questions_extractor(required_questions_number_list, answer_list):
     selected_questions = list()
-
+    remove_last_quote = False
     for q_number in required_questions_number_list:
         if len(answer_list) >= 1:
             # the index of the list should be the question number - 1
@@ -105,6 +104,7 @@ def optional_questions_extractor(required_questions_number_list, answer_list):
 
     for i in range(len(selected_questions)):
         for j in range(len(selected_questions[i])):
+            remove_last_quote = False
             selected_questions[i][j] = selected_questions[i][j][4:]  # remove all the space for the first 4 spaces
             selected_questions[i][j] = selected_questions[i][j].replace(chr(34), "", 1)  # remove the " in the first
             if len(selected_questions[i][j]) >= 2 and selected_questions[i][j][-2] == chr(34):
@@ -117,7 +117,18 @@ def optional_questions_extractor(required_questions_number_list, answer_list):
                 if selected_questions[i][j][k] == "#":
                     selected_questions[i][j] = selected_questions[i][j][0:k]  # remove comment
                     break
-
+                if selected_questions[i][j][len(selected_questions[i][j]) - 1 - k] == chr(
+                        34) and remove_last_quote == False:
+                    # remove that quote
+                    # print(selected_questions[i][j],len(selected_questions[i][j]) - len(selected_questions[i][j])-1-k)
+                    if abs(len(selected_questions[i][j]) - len(selected_questions[i][j]) - 1 - k) <= 2:
+                        selected_questions[i][j] = selected_questions[i][j][0: len(selected_questions[i][j]) - 1 - k] + \
+                                                   selected_questions[i][j][
+                                                   len(selected_questions[i][j]) - 1 - k + 1:len(
+                                                       selected_questions[i][j])]
+                        # remove the quote if it's in the last 2 element
+                    remove_last_quote = True
+                    break
     return selected_questions
 
 
