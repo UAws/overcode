@@ -27,7 +27,7 @@ def make_hashable(seq):
     if isinstance(seq, (list,tuple)):
         return tuple(make_hashable(el) for el in seq)
     elif isinstance(seq, dict):
-        return make_hashable(seq.items())
+        return make_hashable(list(seq.items()))
     else:
         return seq
 
@@ -78,20 +78,20 @@ def assertPhrasesEqual(path1, path2):
 
 def pretty_print(path1, path2, fn):
     in1not2, in2not1 = fn(path1, path2)
-    print "******"
-    print "In 1 not 2:"
-    pprint.pprint(map(list, list(in1not2)))
-    print "------"
-    print "In 2 not 1:"
-    pprint.pprint(map(list, list(in2not1)))
-    print "******"
+    print("******")
+    print("In 1 not 2:")
+    pprint.pprint(list(map(list, list(in1not2))))
+    print("------")
+    print("In 2 not 1:")
+    pprint.pprint(list(map(list, list(in2not1))))
+    print("******")
 
 if __name__ == '__main__':
     import sys
     import pprint
-    print "Solutions"
+    print("Solutions")
     pretty_print(sys.argv[1], sys.argv[2], compare_solutions)
-    print "Variables"
+    print("Variables")
     pretty_print(sys.argv[1], sys.argv[2], compare_variables)
     # Note, when printing phrases, there are too many casts to a list. For useful
     # output, remove one, otherwise you get a list of single characters from

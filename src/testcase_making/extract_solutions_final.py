@@ -20,12 +20,12 @@ def extract_solutions_from_file(filename, output_base):
                 # header row
                 continue
 
-            print row
-            print
+            print(row)
+            print()
             try:
                 username, time, grade, attempts, student_response = row
             except ValueError:
-                print "bad row:",i, row
+                print("bad row:",i, row)
                 raise
 
             if grade == "1.0":
@@ -54,10 +54,10 @@ def extract_solutions_from_file(filename, output_base):
             with open(os.path.join(output_base, 's%s.py' % str(i-1)), 'w') as sol_file:
                 sol_file.write(student_response)
 
-    print "Incorrect solutions/Total solutions:", str(num_incorrect) + '/' + str(num_incorrect + num_correct)
-    print "Number of unique students:", len(username_to_id)
-    print "Average number of attempts:", float(total_num_attempts) / len(username_to_id)
-    print "Average number of lines:", float(total_num_lines) / (num_incorrect + num_correct)
+    print("Incorrect solutions/Total solutions:", str(num_incorrect) + '/' + str(num_incorrect + num_correct))
+    print("Number of unique students:", len(username_to_id))
+    print("Average number of attempts:", float(total_num_attempts) / len(username_to_id))
+    print("Average number of lines:", float(total_num_lines) / (num_incorrect + num_correct))
 
     with open('mapping.txt', 'w') as f:
         pprint.pprint(id_to_username, f)

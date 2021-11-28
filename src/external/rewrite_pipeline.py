@@ -1,6 +1,6 @@
 import ast
 import sys
-import unparse
+from . import unparse
 
 class RewriteAST(ast.NodeTransformer):
     def __init__(self, isAugAssign):
@@ -65,5 +65,5 @@ def reorderVariables(src,toggleAugmented):
             return myf.read()
         #print ""
     except:
-        print "Usage python rewrite.py <fileName> <0 (no aug assign rewriting) or 1>"
+        print("Usage python rewrite.py <fileName> <0 (no aug assign rewriting) or 1>")
 

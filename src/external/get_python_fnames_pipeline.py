@@ -1,6 +1,6 @@
 import ast
 import sys
-import unparse
+from . import unparse
 import re
 
 class SketchTranslator(ast.NodeVisitor):
@@ -74,7 +74,7 @@ class SketchTranslator(ast.NodeVisitor):
         self.funcInputArgsStack.append([]) 
 
     def printFeatureVector(self):
-        print vars()
+        print(vars())
 
 
     def insertVar(self, varName, varType):
@@ -465,10 +465,10 @@ class SketchTranslator(ast.NodeVisitor):
         pass
 
     def printFV(self):
-        print self.NumLoops, ",", self.NumConditionals, ",", self.NumListComprehensions, ",", self.NumCompOperators, ",", self.NumOperators, ",", self.NumReturnCalls, ",", self.NumIfStatements, ",", self.NumElseStatements, ",", self.NumIfBeforeLoop, ",", self.NumLoopBeforeIf 
+        print(self.NumLoops, ",", self.NumConditionals, ",", self.NumListComprehensions, ",", self.NumCompOperators, ",", self.NumOperators, ",", self.NumReturnCalls, ",", self.NumIfStatements, ",", self.NumElseStatements, ",", self.NumIfBeforeLoop, ",", self.NumLoopBeforeIf) 
 
     def printFV1(self):
-        print self.NumLoops, ",", self.NumConditionals, ",", self.NumListComprehensions, ",", self.NumReturnCalls, ",", self.NumIfStatements, ",", self.NumElseStatements, ",", self.NumIfBeforeLoop, ",", self.NumLoopBeforeIf 
+        print(self.NumLoops, ",", self.NumConditionals, ",", self.NumListComprehensions, ",", self.NumReturnCalls, ",", self.NumIfStatements, ",", self.NumElseStatements, ",", self.NumIfBeforeLoop, ",", self.NumLoopBeforeIf) 
 
 
 
@@ -480,14 +480,14 @@ def get_ast_from_file(filename):
 def printFeatureVector(allvars):
     idx = 0
     listvalues = []
-    for v in allvars.keys():
+    for v in list(allvars.keys()):
         if v.startswith("Num"):
             listvalues.append(str(allvars[v]))
             # print "%d: %d" % (idx,allvars[v]),
             # idx += 1
             # print "%d: %s" %(idx,v)
-    print ",".join(listvalues)
-    print "\n"    
+    print(",".join(listvalues))
+    print("\n")    
 
 def main(argv):
     target = argv #[0]

@@ -2,7 +2,7 @@ import os
 from os import path
 #import pickle
 try:
-   import cPickle as pickle
+   import pickle as pickle
 except:
    import pickle
 import pprint
@@ -62,17 +62,17 @@ def tidy_json(source_dir, json_name, tested_function_name):
 
     skipped = []
 
-    print 'opening json now'
+    print('opening json now')
     with open(source_json) as data_file:
         solutions = json.load(data_file)
 
     for id,sol in enumerate(solutions):
         if not sol['IsFixed']:
-            print 'not fixed, skipping'
+            print('not fixed, skipping')
             continue #if its not fixed, dont modify it
-        for key in sol.keys():
+        for key in list(sol.keys()):
             if key.startswith('py_') or key=='before' or key=='SynthesizedAfter':
-                print "Tidying ",id,key
+                print("Tidying ",id,key)
                 #print sol[key]
         
                 with open(before_path,'w') as before_file:
@@ -83,13 +83,13 @@ def tidy_json(source_dir, json_name, tested_function_name):
                     
                     with open(after_path) as after_file:
                         sol['tidy_'+key] = after_file.read()
-                        print id,key, ' tidied'
+                        print(id,key, ' tidied')
                         #print sol['tidy_'+key]
                 except:
                     if STOP_ON_ERROR: raise
                     skipped.append(str(id)+key)
 
-    print 'writing back out to json now'
+    print('writing back out to json now')
     with open(source_json,'w') as data_file:
         json.dump(solutions, data_file, indent=4)
 
@@ -121,7 +121,7 @@ def tidy(source_dir, dest_dir, tested_function_name):
             continue
 
         sol_id = filename.split('.')[0]
-        print "Tidying", sol_id
+        print("Tidying", sol_id)
 
         source_path = path.join(source_dir, filename)
         dest_path = path.join(dest_dir, filename)
@@ -137,16 +137,16 @@ def augment_json(source_dir, json_name):
     before_path = path.join(source_dir, 'before.py')
     after_path = path.join(source_dir, 'after.py')
 
-    print 'opening json now'
+    print('opening json now')
     with open(source_json) as data_file:
         solutions = json.load(data_file)
 
     for id,sol in enumerate(solutions):    
-        for key in sol.keys():
+        for key in list(sol.keys()):
             if key.startswith('tidy_'):
                 sol['augmented_'+key] = import_prefix + sol[key] + testcase_defs
 
-    print 'writing back out to json now'
+    print('writing back out to json now')
     with open(source_json,'w') as data_file:
         json.dump(solutions, data_file, indent=4)
 
@@ -182,12 +182,12 @@ def logger_wrapper(source, output_only):
         elena_finalizer)
 
     try:
-        print 'stdout'
-        print trace.keys()
-        print stdout
-        print time.clock() - t0
+        print('stdout')
+        print(list(trace.keys()))
+        print(stdout)
+        print(time.clock() - t0)
     except:
-        print 'ran into problem'
+        print('ran into problem')
 
     return trace, stdout
 
@@ -207,12 +207,12 @@ def do_logger_run(source, testcases, output_only):
     # RuntimeErrors from max recursion depth exceeded.
     # Make sure all_traces is the right length if this happens!
 
-    print 'running do_logger_run'
+    print('running do_logger_run')
     all_traces = []
     all_outputs = []
     for i, test_case in enumerate(testcases):
         # Print each time so the user can follow along with the progress
-        print "\t" + test_case
+        print("\t" + test_case)
 
         # append each test case in turn
         
@@ -230,7 +230,7 @@ def do_logger_run(source, testcases, output_only):
         # except:
         #     print source
         #     print test_case
-    print
+    print()
 
     return all_traces, all_outputs
 
@@ -256,7 +256,7 @@ def do_pickle(sol_id, all_traces, all_outputs, testcases, dest_dir):
     except (pickle.PicklingError, TypeError):
         # If something goes wrong, clean up, then pass the exception back up
         # the stack
-        print 'failed to pickle sol', sol_id
+        print('failed to pickle sol', sol_id)
         os.remove(pickle_path)
         raise
 
@@ -268,29 +268,29 @@ def execute_json(source_dir, json_name, testCases, output_only, just_preprocessi
     source_json = path.join(source_dir, json_name)
     skipped_running = []
 
-    print 'opening json now'
+    print('opening json now')
     with open(source_json) as data_file:
         solutions = json.load(data_file)
 
-    print 'Before adding execution data, size of solutions is ',sys.getsizeof(solutions)
+    print('Before adding execution data, size of solutions is ',sys.getsizeof(solutions))
     for id,sol in enumerate(solutions): 
         if not sol['IsFixed']:
-            print 'not fixed, skipping'
+            print('not fixed, skipping')
             continue #if its not fixed, dont modify it
-        print id,' size of solutions is ',sys.getsizeof(solutions) 
+        print(id,' size of solutions is ',sys.getsizeof(solutions)) 
         #sol['failed'] = 'REMOVED'  
         sequence_comparison = {}
-        for key in sol.keys():
+        for key in list(sol.keys()):
             if key.startswith('augmented_') and not key.endswith('_sequences'):
                 source = sol[key]
-                if not isinstance(source, basestring):
+                if not isinstance(source, str):
                     skipped_running.append((id,'source not a string'))
-                    print 'skipping ',id,'because source is not a string'
-                    print source
+                    print('skipping ',id,'because source is not a string')
+                    print(source)
                     continue #must be string to continue
                 
                 # Execute
-                print "Running logger on", id
+                print("Running logger on", id)
                 #print type(source)
                 try:
                     all_traces, all_outputs = do_logger_run(source, testCases, output_only)
@@ -316,7 +316,7 @@ def execute_json(source_dir, json_name, testCases, output_only, just_preprocessi
                 except:
                     if STOP_ON_ERROR: raise
                     skipped_running.append(id)
-                    print 'skipping ',id
+                    print('skipping ',id)
 
         # merged_variable_keys = []
         # for key in sequence_comparison.keys():
@@ -324,14 +324,14 @@ def execute_json(source_dir, json_name, testCases, output_only, just_preprocessi
 
         # print 'merged_variable_keys',merged_variable_keys
 
-        prog_versions = sequence_comparison.keys()
-        print 'prog_versions',prog_versions
+        prog_versions = list(sequence_comparison.keys())
+        print('prog_versions',prog_versions)
 
         if not(len(prog_versions) == 2):
-            print 'unexpected number of versions; exiting'
+            print('unexpected number of versions; exiting')
             sys.exit()
 
-        print 'sequence_comparison'
+        print('sequence_comparison')
         pprint.pprint(sequence_comparison)
 
         sequence_comparison_diff = {}
@@ -367,13 +367,13 @@ def execute_json(source_dir, json_name, testCases, output_only, just_preprocessi
         #sys.exit()
 
         if id % 100 == 0:
-            print sol.keys()#['all_traces']
-            for key in sol.keys():
-                print key,':'
-                print pprint.pprint(sol[key])
+            print(list(sol.keys()))#['all_traces']
+            for key in list(sol.keys()):
+                print(key,':')
+                print(pprint.pprint(sol[key]))
             #raw_input("Press Enter to continue...")
         
-    print 'writing back out to json now'            
+    print('writing back out to json now')            
     with open(source_json,'w') as data_file:
         json.dump(solutions, data_file, indent=4)
 
@@ -409,7 +409,7 @@ def execute_and_pickle(source_dir, dest_dir, testcases, output_only):
             source = f.read()
 
         # Execute
-        print "Running logger on", sol_id
+        print("Running logger on", sol_id)
         try:
             all_traces, all_outputs = do_logger_run(source, testcases, output_only)
         except:
@@ -465,13 +465,13 @@ def preprocess_pipeline_data(folder_of_data, testcase_path, output_only, tested_
             augmentedPath, picklePath, testCases, output_only)
 
     # Print out any skipped solutions.
-    print "Solutions skipped:", len(skipped_tidy) + len(skipped_running) + len(skipped_pickling)
+    print("Solutions skipped:", len(skipped_tidy) + len(skipped_running) + len(skipped_pickling))
     if skipped_tidy:
-        print "SKIPPED WHEN TIDYING:"
+        print("SKIPPED WHEN TIDYING:")
         pprint.pprint(skipped_tidy, indent=2)
     if skipped_running:
-        print "SKIPPED WHEN EXECUTING:"
+        print("SKIPPED WHEN EXECUTING:")
         pprint.pprint(skipped_running, indent=2)
     if skipped_pickling:
-        print "SKIPPED WHEN PICKLING:"
+        print("SKIPPED WHEN PICKLING:")
         pprint.pprint(skipped_pickling, indent=2)

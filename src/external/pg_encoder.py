@@ -82,7 +82,7 @@ is_python3 = (sys.version_info[0] == 3)
 if is_python3:
   # avoid name errors (GROSS!)
   long = int
-  unicode = str
+  str = str
 
 
 def is_class(dat):
@@ -90,7 +90,7 @@ def is_class(dat):
   if is_python3:
     return isinstance(dat, type)
   else:
-    return type(dat) in (types.ClassType, types.TypeType)
+    return type(dat) in (type, type)
 
 
 def is_instance(dat):
@@ -109,7 +109,7 @@ def get_name(obj):
   return obj.__name__ if hasattr(obj, '__name__') else get_name(type(obj))
 
 
-PRIMITIVE_TYPES = (int, long, float, str, unicode, bool, type(None))
+PRIMITIVE_TYPES = (int, int, float, str, str, bool, type(None))
 
 def encode_primitive(dat):
   t = type(dat)
@@ -300,7 +300,7 @@ class ObjectEncoder:
         # put a line number suffix on lambdas to more uniquely identify
         # them, since they don't have names
         if func_name == '<lambda>':
-            cod = (dat.__code__ if is_python3 else dat.func_code) # ugh!
+            cod = (dat.__code__ if is_python3 else dat.__code__) # ugh!
             lst = self.line_to_lambda_code[cod.co_firstlineno]
             if cod not in lst:
                 lst.append(cod)

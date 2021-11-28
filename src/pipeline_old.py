@@ -46,11 +46,11 @@ def run(folderOfData, destFolder):
     ###############################################################################
 
     def populate_from_pickles(pickleSrc, formattedSrc, formattedExtn='.py.html'):
-        print "Loading data"
+        print("Loading data")
         for filename in os.listdir(pickleSrc):
             solNum = filename.split('.')[0]
             solNumInt = int(solNum)
-            print solNum
+            print(solNum)
 
             with open(path.join(pickleSrc, filename), 'r') as f:
                 unpickled = pickle.load(f)
@@ -126,7 +126,7 @@ def run(folderOfData, destFolder):
 
     # sequence of values is extracted and compared to what we already have
     def isThisVarSeqInOurDict(localVarData):
-        for tempVarName, tempVarData in dictTempNameToSequence.iteritems():
+        for tempVarName, tempVarData in dictTempNameToSequence.items():
             if tempVarData == extractSequence(localVarData):
                 return tempVarName
         return None
@@ -139,15 +139,15 @@ def run(folderOfData, destFolder):
         numSkippedSols_tooLong = []
 
         # This will not remove duplicates within one solution
-        for k,v in progTraceDictAll.iteritems():
+        for k,v in progTraceDictAll.items():
             # k is the solution number, v is the trace of variable names and values
 
             # Extracts the return value from the trace
-            if '__return__' not in v.keys():
+            if '__return__' not in list(v.keys()):
                 numSkippedSols_tooLong.append(k)
                 continue
 
-            for localVarName, localVarData in v.iteritems():
+            for localVarName, localVarData in v.items():
                 if localVarName.startswith('__'):
                     continue
                 tempVarName = isThisVarSeqInOurDict(localVarData)
@@ -160,7 +160,7 @@ def run(folderOfData, destFolder):
                     # we already have the variable sequence in our dict
                     dictOfNamesAndFilesIndexedByVarSeqTempName[tempVarName].append((localVarName,k))
                 else:
-                    if len(dictOfNamesAndFilesIndexedByVarSeqTempName.keys()) == 0:
+                    if len(list(dictOfNamesAndFilesIndexedByVarSeqTempName.keys())) == 0:
                         # 0 is a temp name here
                         dictOfNamesAndFilesIndexedByVarSeqTempName[0] = [(localVarName,k)]
                         dictTempNameToSequence[0] = theExtractedSequence
@@ -171,7 +171,7 @@ def run(folderOfData, destFolder):
                         dictTempNameToSequence[newTempVarName] = theExtractedSequence
         return numSkippedSols_tooLong
 
-    print "Getting variable equivalents"
+    print("Getting variable equivalents")
     numSkippedSols_tooLong = getVarEquivsAcrossAllSolsLinear()
 
 
@@ -200,13 +200,13 @@ def run(folderOfData, destFolder):
     '''Begin populating a json file (dictForJson) that is indexed by
     the solution name and includes things like the weird and common variable names'''
 
-    print "Populating dictForJson"
+    print("Populating dictForJson")
     dictForJson = {}
-    for nums in sorted(set(map(len, dictOfNamesAndFilesIndexedByVarSeqTempName.values())),reverse=True):
-        for k,v in dictOfNamesAndFilesIndexedByVarSeqTempName.iteritems():
+    for nums in sorted(set(map(len, list(dictOfNamesAndFilesIndexedByVarSeqTempName.values()))),reverse=True):
+        for k,v in dictOfNamesAndFilesIndexedByVarSeqTempName.items():
             if nums == len(v) and nums == 1:
                 for (localVar, solname) in v:
-                    if str(solname) in dictForJson.keys():
+                    if str(solname) in list(dictForJson.keys()):
                         dictForJson[solname]['weirdVars'].append(localVar)
                     else:
                         dictForJson[solname]={}
@@ -223,7 +223,7 @@ def run(folderOfData, destFolder):
             try:
                 cnt[word] += 1
             except:
-                print word, ' failed'
+                print(word, ' failed')
         return cnt.most_common(1)[0][0]
 
 
@@ -253,9 +253,9 @@ def run(folderOfData, destFolder):
     ##      add to dictOfNumFilesByCommonName
     ###############################################################################
 
-    print "Extracting variable names"
+    print("Extracting variable names")
     # Sweep through and accumulate file lengths into a dict
-    for tempKey, listOfFileAndVars in dictOfNamesAndFilesIndexedByVarSeqTempName.iteritems():
+    for tempKey, listOfFileAndVars in dictOfNamesAndFilesIndexedByVarSeqTempName.items():
         numFiles = len(listOfFileAndVars)
         if numFiles > sharedVarThreshold:
 
@@ -269,7 +269,7 @@ def run(folderOfData, destFolder):
                 dictOfNumFilesByCommonName[canonName] = [numFiles]
 
     # Write out dictOfNamesAndFilesIndexedByVarSeqTempName to json so I can visualize it
-    print "Writing variables by varSeqTempName"
+    print("Writing variables by varSeqTempName")
     dumpOutput(dictOfNamesAndFilesIndexedByVarSeqTempName,
                'variablesByVarSeqTempName.json')
 
@@ -312,9 +312,9 @@ def run(folderOfData, destFolder):
     '''Add more info to dictForJson, like the common names for each variable, and
     modifiers to that common name, to indicate with sequence it takes on...'''
 
-    print "Adding common names"
+    print("Adding common names")
     dictOfSeqByCommonNamePlusSuffix = {}
-    for tempKey, listOfFileAndVars in dictOfNamesAndFilesIndexedByVarSeqTempName.iteritems():
+    for tempKey, listOfFileAndVars in dictOfNamesAndFilesIndexedByVarSeqTempName.items():
         numFiles = len(listOfFileAndVars)
         if numFiles > sharedVarThreshold:
             dictOfSeqAndCommonNameByTempVar[tempKey] = {}
@@ -354,7 +354,7 @@ def run(folderOfData, destFolder):
                     dictForJson[solNum]['commonNameAppend'] = [canonAppend]
                     dictForJson[solNum]['commonName']= [canonName]
 
-    print "Writing common variable legend and main json file"
+    print("Writing common variable legend and main json file")
     dumpOutput(dictOfSeqByCommonNamePlusSuffix, 'commonVarLegend.json')
     dumpOutput(dictForJson, 'dictForJson.json')
 
@@ -385,24 +385,24 @@ def run(folderOfData, destFolder):
 
     def getFreeVars(dictOfLocalAndCommonVarNames, argAndReturnData):
         freeVars = {}
-        for k,v in dictOfLocalAndCommonVarNames.iteritems():
+        for k,v in dictOfLocalAndCommonVarNames.items():
             freeVars[k] = []
-            if 'localVars' in v.keys():
+            if 'localVars' in list(v.keys()):
                 for localVar in v['localVars']:
                     if localVar not in argAndReturnData[int(k)]['args'] and localVar not in argAndReturnData[int(k)]['returnVars']:
                         freeVars[k].append(localVar)
-            if 'weirdVars' in v.keys():
-                print 'there are weirds!',k, v['weirdVars']
+            if 'weirdVars' in list(v.keys()):
+                print('there are weirds!',k, v['weirdVars'])
                 for weirdVar in v['weirdVars']:
                     if weirdVar not in argAndReturnData[int(k)]['args'] and weirdVar not in argAndReturnData[int(k)]['returnVars']:
                         freeVars[k].append(weirdVar)
             argAndReturnData[int(k)]['studentCreatedVars'] = freeVars[k]
         return freeVars
 
-    print "Getting free variables"
+    print("Getting free variables")
     freeVars = getFreeVars(dictForJson,argAndReturnVarInfo)
 
-    print "Writing arg and return value info and free vars"
+    print("Writing arg and return value info and free vars")
     dumpOutput(argAndReturnVarInfo, 'argAndReturnVarInfo.json')
     dumpOutput(freeVars, 'freeVars.json')
 
@@ -434,24 +434,24 @@ def run(folderOfData, destFolder):
         import collections
         import copy
         listOfSolDictsForTable = []
-        for solnum,soldata in argsAndCode.iteritems():
+        for solnum,soldata in argsAndCode.items():
             dictWithName = collections.OrderedDict()
             dictWithName['solution'] = int(solnum)
-            if 'args' in soldata.keys():
+            if 'args' in list(soldata.keys()):
                 dictWithName['arguments'] = sorted([loweringfunc(listelement) for listelement in soldata['args']]) #soldata['args']
             else:
                 dictWithName['arguments'] = []
             studCreatedVars = []
-            if 'studentCreatedVars' in soldata.keys():
+            if 'studentCreatedVars' in list(soldata.keys()):
                 studCreatedVars += soldata['studentCreatedVars']
-            if 'returnVars' in soldata.keys():
+            if 'returnVars' in list(soldata.keys()):
                 studCreatedVars += soldata['returnVars']
             dictWithName['studentCreatedVariables'] = sorted([loweringfunc(listelement) for listelement in studCreatedVars])
 
             listOfSolDictsForTable.append(dictWithName)
         return listOfSolDictsForTable
 
-    print "Producing and writing solution dicts for table"
+    print("Producing and writing solution dicts for table")
     listOfSolDictsForTable = produceFooBarBazJson(argAndReturnVarInfo)
     dumpOutput(listOfSolDictsForTable, 'listOfSolDictsForTable.json')
 
@@ -473,10 +473,10 @@ def run(folderOfData, destFolder):
 
     '''Collect all common vars into a single list.'''
 
-    print "Collecting common variables"
+    print("Collecting common variables")
     allCommonVar = set()
-    for sol,varDict in dictForJson.iteritems():
-        if 'sharedVars' in varDict.keys():
+    for sol,varDict in dictForJson.items():
+        if 'sharedVars' in list(varDict.keys()):
             allCommonVar.update(varDict['sharedVars'])
 
 
@@ -575,13 +575,13 @@ def run(folderOfData, destFolder):
     numSkippedSols_rewritePipeline = []
     numSkippedSols_NoSharedVars = []
 
-    print "Creating dict for Exhibit"
-    for solNum, solDict in dictForJson.iteritems():
-        print solNum
+    print("Creating dict for Exhibit")
+    for solNum, solDict in dictForJson.items():
+        print(solNum)
         flagged = False
         try:
             if len(solDict['sharedVars'])>len(set(solDict['sharedVars'])):
-                print 'this solution has multiple indistinguishable instances of a shared variable; fixing!'
+                print('this solution has multiple indistinguishable instances of a shared variable; fixing!')
                 numSkippedSols_commonVarClash.append(solNum)
 
                 for sv in solDict['sharedVars']:
@@ -591,7 +591,7 @@ def run(folderOfData, destFolder):
                             if not solDict['sharedVars'][ind] == solDict['localVars'][ind]: #if it's common and local names are i, don't make it i_i
                                 solDict['sharedVars'][ind] = solDict['sharedVars'][ind]+'_'+solDict['localVars'][ind]+'__'
         except:
-            print 'no sharedVars in vardict... Why?', sol, varDict
+            print('no sharedVars in vardict... Why?', sol, varDict)
             numSkippedSols_NoSharedVars.append(solNum)
 
         tempDict = solDict.copy()
@@ -601,7 +601,7 @@ def run(folderOfData, destFolder):
         try:
             tempDict['fnames'] = fnames.main(tidyPath)
         except:
-            print 'warning: no fnames for ', solNum
+            print('warning: no fnames for ', solNum)
 
         with open(tidyPath,'U') as f:
             read_data = f.read()
@@ -609,14 +609,14 @@ def run(folderOfData, destFolder):
         renamed_src = read_data
 
         extraToken = '_temp' # a * didn't work so well
-        if 'sharedVars' in tempDict.keys():
+        if 'sharedVars' in list(tempDict.keys()):
             for i in range(len(tempDict['sharedVars'])):
                 locVarName = tempDict['localVars'][i]
                 sharedVarNameWithStar = tempDict['sharedVars'][i]+extraToken 
                 try:
                     renamed_src = identifier_renamer.rename_identifier(renamed_src, locVarName,sharedVarNameWithStar)
                 except:
-                    print 'Could not run Philip renamer; skipping!'
+                    print('Could not run Philip renamer; skipping!')
                     src_skipped_by_philip.append(renamed_src)
                     solnum_skipped_by_philip.append(solNum)
                     flagged = True
@@ -624,7 +624,7 @@ def run(folderOfData, destFolder):
                     try:
                         renamed_src = rewrite_pipeline.reorderVariables(renamed_src,togVar)
                     except:
-                        print 'skipping!'
+                        print('skipping!')
                         numSkippedSols_rewritePipeline.append(solNum)
                         flagged = True
 
@@ -637,19 +637,19 @@ def run(folderOfData, destFolder):
                     try:
                         renamed_src = identifier_renamer.rename_identifier(renamed_src, sharedVarNameWithStar,sharedVarNameWithOutStar)
                     except:
-                        print 'Could not run Philip renamer; skipping!'
+                        print('Could not run Philip renamer; skipping!')
                         src_skipped_by_philip.append(renamed_src)
                         solnum_skipped_by_philip.append(solNum)
                         flagged = True
 
-        if 'weirdVars' in tempDict.keys():
+        if 'weirdVars' in list(tempDict.keys()):
             for weirdInstance in tempDict['weirdVars']:
                 if weirdInstance in allCommonVar:
                     numSkippedSols_weirdVarClash.append(solNum)
                     try:
                         renamed_src = identifier_renamer.rename_identifier(renamed_src, weirdInstance,weirdInstance+'__')
                     except:
-                        print 'Could not run Philip renamer; skipping!'
+                        print('Could not run Philip renamer; skipping!')
                         src_skipped_by_philip.append(renamed_src)
                         solnum_skipped_by_philip.append(solNum)
                         flagged = True
@@ -665,7 +665,7 @@ def run(folderOfData, destFolder):
                 strippedLine = unstrippedLine.strip()
                 leadingSpace = len(unstrippedLine) - len(strippedLine) #how much was lobbed off?
                 tempDict['canonicalPYcodeIndents'].append(leadingSpace)
-                if strippedLine in tabCounter.keys():
+                if strippedLine in list(tabCounter.keys()):
                     tabCounter[strippedLine].update([leadingSpace])
                 else:
                     tabCounter[strippedLine] = Counter()
@@ -682,7 +682,7 @@ def run(folderOfData, destFolder):
             dictForExihibit['items'].append(tempDict)
 
 
-    print "Writing dictForExihibit and phraseAndTabCounter"
+    print("Writing dictForExihibit and phraseAndTabCounter")
     dumpOutput(dictForExihibit, 'dictForExihibit.json')
 
     phraseAndTabCounter = {}
@@ -732,9 +732,9 @@ def run(folderOfData, destFolder):
     dictOfRepresentatives[theJSON['items'][0]['label']]['count'] = 1
     dictOfRepresentatives[theJSON['items'][0]['label']]['members'] = [theJSON['items'][0]['label']]
 
-    print "Finding representatives"
+    print("Finding representatives")
     for JSONitem in theJSON['items'][1:]:
-        for groupID, REPitem in dictOfRepresentatives.iteritems():
+        for groupID, REPitem in dictOfRepresentatives.items():
             if set(REPitem['rep']['canonicalPYcode']) == set(JSONitem['canonicalPYcode']):
                 REPitem['count']+=1
                 REPitem['members'].append(JSONitem['label'])
@@ -742,7 +742,7 @@ def run(folderOfData, destFolder):
         else:
             dictOfRepresentatives[JSONitem['label']] = {'rep': JSONitem, 'count': 1, 'members' : [JSONitem['label']] }
 
-    print "Writing repDict"
+    print("Writing repDict")
     dumpOutput(dictOfRepresentatives, 'repDict.json')
 
     ###############################################################################
@@ -772,17 +772,17 @@ def run(folderOfData, destFolder):
     ## initialize repDataDict
     ###############################################################################
 
-    print "Finding misfits"
+    print("Finding misfits")
     misfitTotal = 0
     misfitMembers = []
-    for k, v in dictOfRepresentatives.iteritems():
+    for k, v in dictOfRepresentatives.items():
         if v['count']==1:
             misfitTotal += 1
             misfitMembers.append(k)
 
     repCounts = []
     repCounts.append(('misfits',misfitTotal))
-    for k, v in dictOfRepresentatives.iteritems():
+    for k, v in dictOfRepresentatives.items():
         if v['count'] != 1:
             repCounts.append((k, v['count']))
 
@@ -792,7 +792,7 @@ def run(folderOfData, destFolder):
     repDataDict['misfitMembers']= misfitMembers
     repDataDict['repCountsSorted'] = newlist
 
-    print "Writing sorted rep dict"
+    print("Writing sorted rep dict")
     dumpOutput(repDataDict, 'repDictSorted.json')
 
     ###############################################################################
@@ -842,8 +842,8 @@ def run(folderOfData, destFolder):
     variables = []
     sequences = []
 
-    print "Setting up solutions, phrases, variables, sequences"
-    for groupID, groupDescription in raw_solutions.iteritems():
+    print("Setting up solutions, phrases, variables, sequences")
+    for groupID, groupDescription in raw_solutions.items():
         solution = {'code': groupDescription['rep']['code']}
         solution['phraseIDs'] = set()
         solution['variableIDs'] = set()
@@ -858,7 +858,7 @@ def run(folderOfData, destFolder):
             lineDict['indent'] = groupDescription['rep']['canonicalPYcodeIndents'][i]
             lineDict['phraseID'] = phraseID
             solution['lines'].append(lineDict)
-        if 'sharedVars' in groupDescription['rep'].keys():
+        if 'sharedVars' in list(groupDescription['rep'].keys()):
             for sharVar in groupDescription['rep']['sharedVars']:
                 if not sharVar.endswith('__'):
                     if sharVar not in variables:
@@ -868,7 +868,7 @@ def run(folderOfData, destFolder):
                     solution['variableIDs'].add(varID)
         else:
             solution['variableIDs'] = []
-        if 'fnames' in groupDescription['rep'].keys():
+        if 'fnames' in list(groupDescription['rep'].keys()):
             solution['keywords'] = groupDescription['rep']['fnames']
         solution['number'] = int(groupDescription['rep']['label'])
         solution['members'] = list(groupDescription['members'])
@@ -877,7 +877,7 @@ def run(folderOfData, destFolder):
         solution['count'] = int(groupDescription['count'])
         solutions.append(solution)
 
-    print "Writing solutions"
+    print("Writing solutions")
     dumpOutput(solutions, 'solutions.json')
 
     def generateCodeWithFeatureSpans(phrase):
@@ -920,7 +920,7 @@ def run(folderOfData, destFolder):
     ##      }
     ###############################################################################
 
-    print "Finding most common indent and writing phrases"
+    print("Finding most common indent and writing phrases")
     for i in range(len(phrases)):
         phrase = phrases[i]
         mostCommonIndent = tabCounter[phrase].most_common(1)[0][0]
@@ -928,7 +928,7 @@ def run(folderOfData, destFolder):
 
     dumpOutput(phrases, 'phrases.json')
 
-    print "Collecting and writing variables"
+    print("Collecting and writing variables")
     for i in range(len(variables)):
         variable = variables[i]
         sequence = sequences[i]

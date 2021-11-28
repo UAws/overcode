@@ -4,7 +4,7 @@ import random
 import re
 import sys
 import tokenize
-from StringIO import StringIO
+from io import StringIO
 
 # the run library should overwrite this with a particular random seed for the test.
 rand = random.Random(1)
@@ -84,7 +84,7 @@ class Grader(object):
 
         MUST NOT RUN the submission.  Only allowed to do safe checks, like substr, etc.
         """
-        return filter(None, [check(submission_str) for check in self._input_checks])
+        return [_f for _f in [check(submission_str) for check in self._input_checks] if _f]
 
     def preprocess(self, submission_str):
         """
@@ -108,7 +108,7 @@ class Grader(object):
         End the test with a message to the student.
         """
         self._end_tests += 1
-        print _("*** Error: {0}").format(message)
+        print(_("*** Error: {0}").format(message))
         raise EndTest()
 
     def caught_end_test(self):
@@ -235,7 +235,7 @@ def _tokens(code):
     """A wrapper around tokenize.generate_tokens.""" 
     # Protect against pathological inputs: http://bugs.python.org/issue16152
     code = code.rstrip() + "\n"
-    if isinstance(code, unicode):
+    if isinstance(code, str):
         code = code.encode('utf8')
     code = "# coding: utf8\n" + code
     toks = tokenize.generate_tokens(StringIO(code).readline)
@@ -479,11 +479,11 @@ def exec_wrapped_code(environment=None, post_process=None):
         environment = {}
     def test_fn(submission_module):
         with capture_stdout() as stdout:
-            exec submission_module.submission_code in environment
+            exec(submission_module.submission_code, environment)
         stdout_text = stdout.getvalue()
         if post_process:
             stdout_text = post_process(stdout_text)
-        print stdout_text
+        print(stdout_text)
 
     return test_fn
 
@@ -501,10 +501,10 @@ def exec_code_and_inspect_values(environment=None, vars_to_inspect=None, post_pr
         environment = {}
     def test_fn(submission_module):
         with capture_stdout() as stdout:
-            exec submission_module.submission_code in environment
+            exec(submission_module.submission_code, environment)
 
         for var in vars_to_inspect:
-            print var
+            print(var)
 
     return test_fn
     
@@ -515,7 +515,7 @@ def trace_wrapped_code(inspector, error_msg):
         with inspector:
             for report in inspector.inspect_dispatch():
                 if not report:
-                    print error_msg
+                    print(error_msg)
     return test_fn
 
 def invoke_student_function(fn_name, args, environment=None, output_writer=None):
@@ -528,10 +528,10 @@ def invoke_student_function(fn_name, args, environment=None, output_writer=None)
     """
     output_writer = output_writer or repr
     def doit(submission_module):
-        for name, value in (environment or {}).iteritems():
+        for name, value in (environment or {}).items():
             setattr(submission_module, name, value)
         fn = getattr(submission_module, fn_name)
-        print output_writer(fn(*args))
+        print(output_writer(fn(*args)))
     return doit
 
 class InvokeStudentFunctionTest(Test):

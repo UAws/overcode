@@ -1,7 +1,7 @@
 "Usage: unparse.py <path to source file>"
 import sys
 import ast
-import cStringIO
+import io
 import os
 
 # Large float and imaginary literals get turned into infinities in the AST.
@@ -317,7 +317,7 @@ class Unparser:
             self.write(repr(tree.s))
         elif isinstance(tree.s, str):
             self.write("b" + repr(tree.s))
-        elif isinstance(tree.s, unicode):
+        elif isinstance(tree.s, str):
             self.write(repr(tree.s).lstrip("u"))
         else:
             assert False, "shouldn't get here"
@@ -406,7 +406,7 @@ class Unparser:
             self.dispatch(k)
             self.write(": ")
             self.dispatch(v)
-        interleave(lambda: self.write(", "), write_pair, zip(t.keys, t.values))
+        interleave(lambda: self.write(", "), write_pair, list(zip(t.keys, t.values)))
         self.write("}")
 
     def _Tuple(self, t):
@@ -583,12 +583,12 @@ def testdir(a):
         for n in names:
             fullname = os.path.join(a, n)
             if os.path.isfile(fullname):
-                output = cStringIO.StringIO()
-                print 'Testing %s' % fullname
+                output = io.StringIO()
+                print('Testing %s' % fullname)
                 try:
                     roundtrip(fullname, output)
                 except Exception as e:
-                    print '  Failed to compile, exception is %s' % repr(e)
+                    print('  Failed to compile, exception is %s' % repr(e))
             elif os.path.isdir(fullname):
                 testdir(fullname)
 
